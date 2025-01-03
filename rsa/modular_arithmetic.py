@@ -12,7 +12,7 @@ Functions:
     - euclidian_ext(a,b) : Performs the extended euclidian algorithm 
     - mod_inv(a, n) : Finds the modular inverse of an integer modulo an integer 
     - mod_exp(a, e, n) : Performs fast modular expenetiation  
-    - chinese_remainders : For fast decryption for the RSA
+    - chinese_remainders(A, R) : For fast decryption for the RSA
 """
 
 def euclidian_div(a: int, b: int) -> tuple:
@@ -122,7 +122,7 @@ def euclidian_ext(a: int, b: int) -> tuple:
 
     return a, u0, v0
 
-def mod_inv(a, n):
+def mod_inv(a, n) -> int:
     """
     Find the modular inverse of a given integer with respect to 
     a given modulus. Naturally the given integer should be coprime
@@ -137,7 +137,8 @@ def mod_inv(a, n):
     Raises:
         ValueError : if a is not coprime with n (necessary and sufficient for the existence of the inverse) 
     """
-
+    if gcd(a, n) != 1:
+        raise ValueError(f"{a} and {n} are not coprime, the inverse doesn't exist")
     return 
 
 def mod_exp(a: int, e: int, n: int) -> int:
