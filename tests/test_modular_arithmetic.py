@@ -1,4 +1,9 @@
 # tests/test_modular_arihtmetic.py 
+import sys
+import os
+
+# Adding the module path 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import pytest
 from rsa.modular_arithmetic import * 
@@ -65,3 +70,11 @@ def test_mod_exp_basic():
     assert mod_exp(3, 3, 7) == 6
     assert mod_exp(5, 0, 13) == 1
     assert mod_exp(4, 2, 5) == 1
+
+def test_chinese_remainders():
+    """
+    Test for the chinese remainders function 
+    """
+    assert chinese_remainders([3, 4, 5],[2, 3, 1]) == 11 
+
+

@@ -43,23 +43,25 @@ def euclidian_div(a: int, b: int) -> tuple:
     if b == 0:
         raise ValueError("Divisor must not be zero.")
 
-    # We train signs later
-    q = 0 
-    r = abs(a)
+    # Handling the absolute values of a and b
+    abs_a = abs(a)
+    abs_b = abs(b)
 
-    while r >= abs(b): 
-        r -= abs(b)
+    q = 0
+    r = abs_a
+
+    # Division process
+    while r >= abs_b:
+        r -= abs_b
         q += 1
 
-    # Adjusting the sign of the quoptient 
-    if a < 0 < b or b < 0 < a:
+    # Adjusting the sign of the quotient and remainder
+    if (a < 0 and b > 0) or (a > 0 and b < 0):
         q *= -1
-
-    # Expelecitly computing the remainder
-    r = a - (b * q) 
+        if r != 0:
+            r = abs_b - r
 
     return q, r
-
 def gcd(a: int, b:int) -> int :
     """
         Perform euclid's algorihtm in order to obtain the gcd of two given integers a, b. 
@@ -139,8 +141,13 @@ def mod_inv(a, n) -> int:
     """
     if gcd(a, n) != 1:
         raise ValueError(f"{a} and {n} are not coprime, the inverse doesn't exist")
-    return 
 
+    # We simply return the result given by the extended euclid function taken modulo n 
+    
+    inverse = euclidian_ext(a, n)[0]
+    _, inverse = euclidian_div(inverse, n)
+
+    return inverse
 def mod_exp(a: int, e: int, n: int) -> int:
     """
     Perform fast modular expenentiation on an a give integer, 
@@ -207,10 +214,10 @@ def chinese_remainders(A: list, R: list) -> int:
     if len(A) == 0 :
         raise ValueError("The input cannot be empty")
     
-    for i in A:
-        for j in A: 
-            if i != j and gcd(i, j) != 1:
-                raise ValueError("The modulies are not all coprime")
+    for i in range(len(A)):
+        for j in range(i + 1, len(A)): 
+            if i != j and gcd(A[i], A[j]) != 1:
+                raise ValueError("The moduli are not all coprime")
 
     M = 1   # Computing the product of the mi, i.e M 
     for mi in A:
@@ -219,8 +226,8 @@ def chinese_remainders(A: list, R: list) -> int:
     x = 0   # Computing the result using the formula in the theorem's proof
     for i in range(len(A)):
         ni, _ = euclidian_div(M, A[i])
-        _, invi, _ = euclidian_ext(ni, A[i])
-        x += R[i] * ni * inv_i 
+        _, invi , _ = euclidian_ext(ni, A[i])
+        x += R[i] * ni * invi 
 
     # We return the final result modulo M 
-    return euclidian_div(x, M)[1] 
+    return euclidian_div(x, M)[1]
