@@ -1,4 +1,4 @@
-# Project Name
+# RSAlchemy
 
 ## Table of Contents
 - [Introduction](#introduction)
